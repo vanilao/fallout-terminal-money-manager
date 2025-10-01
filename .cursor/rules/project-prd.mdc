@@ -1,0 +1,81 @@
+---
+description: Project PRD Reference and Todo Management Rule
+globs:
+alwaysApply: true
+---
+
+# Project PRD Reference Rule
+
+## Always Reference the PRD
+Before starting any development work, ALWAYS read and reference the project PRD located at `docs/project-prd.md`. This document contains:
+
+- **Product Vision**: Fallout-themed personal finance management app
+- **Technical Stack**: React 18+ with TypeScript, TailwindCSS, Zustand, Dexie.js
+- **Core Features**: Terminal interface, financial management, gamification system
+- **Development Phases**: 5 phases over 16 weeks
+- **Architecture**: Data models, command structure, UI/UX specifications
+
+## Todo List Creation Guidelines
+
+When creating todolists, follow these patterns based on the PRD:
+
+### Phase-Based Organization
+Break down tasks according to the 5 development phases outlined in the PRD:
+1. **Foundation** (Weeks 1-3): Project setup, basic terminal UI, command parser
+2. **Core Features** (Weeks 4-6): CRUD operations, analytics, reporting
+3. **Gamification** (Weeks 7-9): XP system, achievements, shop
+4. **Polish & Content** (Weeks 10-12): Themes, ASCII pets, lore
+5. **Cloud Features** (Weeks 13-16): Backend, authentication, sync
+
+### Feature-Specific Todos
+Create todos that align with PRD features:
+- **Terminal Interface**: Boot sequence, command parsing, ASCII styling
+- **Financial Management**: Transaction CRUD, analytics, reporting
+- **Gamification**: XP system, achievements, S.P.E.C.I.A.L. stats
+- **Shop & Unlockables**: Points economy, themes, pets, lore packs
+
+### Technical Implementation
+Reference the technical specifications from the PRD:
+- Use specified tech stack (React 18+, TypeScript, TailwindCSS, etc.)
+- Follow data architecture interfaces (UserProfile, Transaction, GameState)
+- Implement command structure as defined in section 3.1.2
+- Maintain performance requirements (<3s load, <100ms command response)
+
+### Success Metrics Alignment
+Ensure todos contribute to measurable outcomes:
+- User engagement metrics (DAU/MAU, session duration)
+- Financial impact (transaction tracking, budget adherence)
+- Gamification success (achievement unlocks, level progression)
+
+## Command Structure Reference
+Always implement commands following the PRD specification:
+```bash
+# Financial Commands
+add <amount> <category> "<description>" [--date YYYY-MM-DD]
+spend <amount> <category> "<description>" [--recurring]
+balance [--detailed]
+summary <period> [--export]
+
+# Goals Commands
+goal create <name> <target_amount> <deadline>
+goal progress <name>
+
+# Gaming Commands
+stats
+achievements
+shop
+inventory
+```
+
+## Data Model Compliance
+Ensure all data structures follow the PRD interfaces:
+- UserProfile with vaultDwellerId, XP, level, achievements
+- Transaction with type, amount, category, XP earned
+- GameState with balance, budget, goals, shop points
+
+## UI/UX Standards
+Maintain Fallout terminal aesthetic:
+- Color scheme: Amber phosphor (#00ff41), terminal brown (#3d2817)
+- Typography: "Share Tech Mono" or "VT323" monospace
+- ASCII art styling for charts and graphics
+- Terminal glow effects and authentic boot sequence
