@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Terminal-specific styles */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&family=VT323:wght@400&display=swap');
+
+:root {
+  --terminal-green: #00ff41;
+  --terminal-brown: #3d2817;
+  --vault-blue: #41a7ff;
+  --nuclear-yellow: #ffff00;
+  --radiation-red: #ff0000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Share Tech Mono', 'VT323', monospace;
+  background: #000000;
+  color: var(--terminal-green);
+  overflow: hidden;
+  height: 100vh;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+}
+
+/* CRT Effect */
+.terminal-screen {
+  background: linear-gradient(45deg, #000000 0%, #001100 50%, #000000 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 65, 0.03) 2px,
+    rgba(0, 255, 65, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Terminal glow effect */
+.terminal-glow {
+  text-shadow: 
+    0 0 5px var(--terminal-green),
+    0 0 10px var(--terminal-green),
+    0 0 15px var(--terminal-green),
+    0 0 20px var(--terminal-green);
+}
+
+/* Cursor animation */
+.terminal-cursor {
+  background-color: var(--terminal-green);
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Phosphor glow animation */
+.phosphor-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 
+      0 0 5px var(--terminal-green),
+      0 0 10px var(--terminal-green),
+      0 0 15px var(--terminal-green);
+  }
+  to {
+    text-shadow: 
+      0 0 10px var(--terminal-green),
+      0 0 20px var(--terminal-green),
+      0 0 30px var(--terminal-green);
+  }
+}
+
+/* Terminal input styling */
+.terminal-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--terminal-green);
+  font-family: 'Share Tech Mono', 'VT323', monospace;
+  font-size: 14px;
+  width: 100%;
+}
+
+.terminal-input::placeholder {
+  color: rgba(0, 255, 65, 0.5);
+}
+
+/* Scrollbar styling for terminal */
+.terminal-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.terminal-scroll::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+.terminal-scroll::-webkit-scrollbar-thumb {
+  background: var(--terminal-green);
+  border-radius: 4px;
+}
+
+.terminal-scroll::-webkit-scrollbar-thumb:hover {
+  background: #00cc33;
+}
+
+/* ASCII art styling */
+.ascii-art {
+  font-family: 'Share Tech Mono', monospace;
+  line-height: 1;
+  white-space: pre;
+  color: var(--terminal-green);
+}
+
+/* Power button styling */
+.power-button {
+  background: #ff4444;
+  border: 2px solid #cc0000;
+  border-radius: 4px;
+  color: white;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  padding: 4px 8px;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+}
+
+.power-button:hover {
+  background: #ff6666;
+  box-shadow: 0 0 15px rgba(255, 68, 68, 0.8);
+}
+
+/* Terminal casing styling */
+.terminal-casing {
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  border: 2px solid #333333;
+  border-radius: 8px;
+  box-shadow: 
+    inset 0 0 20px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(0, 255, 65, 0.2);
+}
