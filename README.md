@@ -1,0 +1,1 @@
+# fallout-terminal-money-manager
