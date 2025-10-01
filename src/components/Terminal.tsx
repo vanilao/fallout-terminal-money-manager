@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { TerminalState, TerminalOutput } from '../types';
+import { useLogin } from './LoginPrompt';
 
 interface TerminalProps {
   onCommand?: (command: string) => void;
@@ -16,10 +17,26 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand, initialOutput = [] }) =>
     cursorPosition: 0,
   });
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const hasBooted = useRef(false);
+
+  // Login hook
+  const login = useLogin({
+    onLoginSuccess: (username: string) => {
+      setIsLoggedIn(true);
+      completeBootSequence(username);
+    },
+    onOutput: (output: TerminalOutput) => {
+      setTerminalState(prev => ({
+        ...prev,
+        output: [...prev.output, output],
+      }));
+    },
+    isTyping,
+  });
 
   // Boot sequence effect
   useEffect(() => {
@@ -38,26 +55,19 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand, initialOutput = [] }) =>
       await typeText('-Server 1-');
       await delay(1000);
       
-      // System initialization
-      await typeText('Initializing VAULT-FIN Terminal...');
-      await delay(800);
-      await typeText('Loading financial protocols...');
-      await delay(600);
-      await typeText('Establishing secure connection...');
-      await delay(700);
-      await typeText('System ready.');
+      // Login/Register prompt first
+      await typeText('VAULT-FIN Terminal v2.3.1');
+      await delay(300);
+      await typeText('Access restricted to authorized Vault personnel only.');
       await delay(500);
-      
-      // Welcome message
-      await typeText('Welcome to VAULT-FIN Terminal v2.3.1');
+      await typeText('Do you have an account?');
       await delay(300);
-      await typeText('Type "help" for available commands.');
-      await delay(300);
+      await typeText('Type "register" to create new account or "login" to sign in:');
+      await delay(200);
       
-      setTerminalState(prev => ({ ...prev, isBooted: true }));
       setIsTyping(false);
       
-      // Focus input after boot
+      // Focus input for login
       setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
@@ -98,6 +108,38 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand, initialOutput = [] }) =>
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+
+  const completeBootSequence = async (username: string) => {
+    setIsTyping(true);
+    
+    await typeText(`Welcome, ${username}.`);
+    await delay(500);
+    await typeText('Initializing VAULT-FIN Terminal...');
+    await delay(800);
+    await typeText('Loading financial protocols...');
+    await delay(600);
+    await typeText('Establishing secure connection...');
+    await delay(700);
+    await typeText('Loading personal financial data...');
+    await delay(800);
+    await typeText('Synchronizing with Vault database...');
+    await delay(600);
+    await typeText('System ready.');
+    await delay(500);
+    await typeText('VAULT-FIN Terminal ready.');
+    await delay(300);
+    await typeText('Type "help" for available commands.');
+    await delay(300);
+    
+    setTerminalState(prev => ({ ...prev, isBooted: true }));
+    setIsTyping(false);
+    
+    // Focus input after boot
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
+  };
+
   const handleCommandSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -105,6 +147,14 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand, initialOutput = [] }) =>
 
     const command = terminalState.currentCommand.trim();
     if (!command) return;
+
+    // Handle login process
+    if (login.isLoginActive() && !isLoggedIn) {
+      login.handleLoginCommand(command, () => {
+        setTerminalState(prev => ({ ...prev, currentCommand: '' }));
+      });
+      return;
+    }
 
     // If terminal isn't booted yet, just clear the command
     if (!terminalState.isBooted) {
@@ -247,18 +297,18 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand, initialOutput = [] }) =>
             </span>
             <input
               ref={inputRef}
-              type="text"
+              type={(login.loginState.isPasswordPrompt || login.loginState.isConfirmPasswordPrompt) ? "password" : "text"}
               value={terminalState.currentCommand}
               onChange={(e) => setTerminalState(prev => ({ ...prev, currentCommand: e.target.value }))}
               onKeyDown={handleKeyDown}
               className="terminal-input flex-1 bg-transparent outline-none"
               style={{ fontFamily: 'VT323, monospace', fontSize: '18px' }}
-              placeholder={isTyping ? "Initializing..." : terminalState.isBooted ? "Enter command..." : "Booting..."}
+              placeholder={login.getPlaceholder()}
               disabled={isTyping}
               autoComplete="off"
               spellCheck={false}
             />
-            {!isTyping && terminalState.isBooted && (
+            {login.shouldShowCursor() && (
               <div className="terminal-cursor w-2 h-5 ml-1"></div>
             )}
           </form>

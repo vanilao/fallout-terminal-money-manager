@@ -109,6 +109,12 @@ body {
   width: 100%;
 }
 
+/* Password field styling */
+.terminal-input[type="password"] {
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
 .terminal-input::placeholder {
   color: rgba(0, 255, 65, 0.5);
 }
@@ -143,18 +149,22 @@ body {
 .power-button {
   background: #ff4444;
   border: 2px solid #cc0000;
-  border-radius: 4px;
+  border-radius: 6px;
   color: white;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  padding: 4px 8px;
+  font-family: 'VT323', 'Share Tech Mono', monospace;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 8px 16px;
   text-transform: uppercase;
-  box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+  box-shadow: 0 0 12px rgba(255, 68, 68, 0.5);
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .power-button:hover {
   background: #ff6666;
-  box-shadow: 0 0 15px rgba(255, 68, 68, 0.8);
+  box-shadow: 0 0 25px rgba(255, 68, 68, 0.8);
+  transform: translateY(-2px);
 }
 
 /* Terminal casing styling */
